@@ -1,20 +1,20 @@
-package proj.notacao;
+package model;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
-
-import br.com.sramos.exemploshibernate.conexao.HibernateUtil;
-import br.com.sramos.exemploshibernate.crudxml.Contato;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import br.com.sramos.exemploshibernate.conexao.HibernateUtil;
 
-public class CttCrudAnttn {
+public class ContatoCrudXML {
 	
-	public void salvar(CttHibAnttn contato){
+	public void salvar(Contato contato){
 		Session sessao = null;
 		Transaction transacao = null;
 		try {
@@ -23,17 +23,17 @@ public class CttCrudAnttn {
 			sessao.save(contato);
 			transacao.commit();			
 		} catch (HibernateException e) {
-			System.out.println("Erro ao inserir contato. Codigo do Erro: "+ e.getMessage());
+			System.out.println("Não foi possivel inserir o contato. Erro: "+ e.getMessage());
 		}finally{
 			try {
 				sessao.close();
 			} catch (Throwable t) {
-				System.out.println("Erro ao finalizar inserção. Codigo do Erro: "+ t.getMessage());
+				System.out.println("Erro ao fechar opera��o de inser��o. Mensagem: "+ t.getMessage());
 			}
 		}
 	}
 	
-	public void atualizar(CttHibAnttn contato){
+	public void atualizar(Contato contato){
 		Session sessao = null;
 		Transaction transacao = null;
 		try {
@@ -42,17 +42,17 @@ public class CttCrudAnttn {
 			sessao.update(contato);
 			transacao.commit();			
 		} catch (HibernateException e) {
-			System.out.println("Erro ao alterar contato. Codigo do erro: "+ e.getMessage());
+			System.out.println("N�o foi possivel alterar o contato. Erro: "+ e.getMessage());
 		}finally{
 			try {
 				sessao.close();
 			} catch (Throwable t) {
-				System.out.println("Erro ao finalizar operão de atualização. codigo do erro: "+ t.getMessage());
+				System.out.println("Erro ao fechar opera��o de atualização. Mensagem: "+ t.getMessage());
 			}
 		}
 	}
 	
-	public void excluir(CttHibAnttn contato){
+	public void excluir(Contato contato){
 		Session sessao = null;
 		Transaction transacao = null;
 		try {
@@ -61,21 +61,21 @@ public class CttCrudAnttn {
 			sessao.delete(contato);
 			transacao.commit();			
 		} catch (HibernateException e) {
-			System.out.println("Erro ao excluir contato. Codigo de erro: "+ e.getMessage());
+			System.out.println("N�o foi possivel excluir o contato. Erro: "+ e.getMessage());
 		}finally{
 			try {
 				sessao.close();
 			} catch (Throwable t) {
-				System.out.println("Erro ao finalizar exclusão. Codigo do erro: "+ t.getMessage());
+				System.out.println("Erro ao fechar opera��o de exclus�o. Mensagem: "+ t.getMessage());
 			}
 		}
 	}
 	
-	public List<CttHibAnttn> listar(){
+	public List<Contato> listar(){
 		Session sessao = null;
 		Transaction transacao = null;
 		Query consulta = null;
-		List<CttHibAnttn> resultado = null;
+		List<Contato> resultado = null;
 		try {
 			sessao = HibernateUtil.getSessionFactory().openSession();
 			transacao = sessao.beginTransaction();
@@ -84,12 +84,12 @@ public class CttCrudAnttn {
 			transacao.commit();
 			return resultado;
 		} catch (HibernateException e) {
-			System.out.println("Erro ao selecionar contato. Codigo do erro: "+ e.getMessage());
+			System.out.println("N�o foi possivel selecionar os contatos. Erro: "+ e.getMessage());
 		}finally{
 			try {
 				sessao.close();
 			} catch (Throwable t) {
-				System.out.println("Erro ao finalizar operação de consulta. Codigo de erro: "+ t.getMessage());
+				System.out.println("Erro ao fechar opera��o de consulta. Mensagem: "+ t.getMessage());
 			}
 		}
 		return resultado;
@@ -109,12 +109,12 @@ public class CttCrudAnttn {
 			transacao.commit();			
 			return contato;
 		} catch (HibernateException e) {
-			System.out.println("Erro ao buscar contato. Codigo do erro: "+ e.getMessage());
+			System.out.println("N�o foi possivel buscar contato. Erro: "+ e.getMessage());
 		}finally{
 			try {
 				sessao.close();
 			} catch (Throwable t) {
-				System.out.println("Erro ao finalizar operão de busca. Mensagem: "+ t.getMessage());
+				System.out.println("Erro ao fechar opera��o de busca. Mensagem: "+ t.getMessage());
 			}
 		}
 		return contato;
@@ -122,21 +122,40 @@ public class CttCrudAnttn {
 
 	
 	public static void main(String[] args) {
-		CttCrudAnttn contatoCrudAnnotations = new CttCrudAnttn();
-		String[] nomes = {"Leonardo", "Nathane", "Ricardo"};
-		String[] fones = {"(16) 99609-5276", "(16) 94827-3345", "(16) 97867-5832"};
-		String[] emails = {"leo.dehn@hotmail.com", "nathcarolinaribeiromagalhaes@gmail.com", "ricardo@ifsp.edu.gov.br"};
-		CttHibAnttn contato = null;
+		ContatoCrudXML contatoCrudXML = new ContatoCrudXML();
+		String[] nomes = {"Ciclano", "Adriano", "Carol"};
+		String[] fones = {"(11) 4455-1122", "(11) 7788-9966", "(11) 4477-8855"};
+		String[] emails = {"ciclano@teste.com.br", "adriano@teste.com.br", "carol@teste.com.br"};
+		String[] observacoes = {"Novo cliente", "Cliente em dia", "Ligar na quinta"};
+		Contato contato = null;
 		
 		for(int i = 0 ; i < nomes.length ; i++){
-			contato = new CttHibAnttn();
+			contato = new Contato();
 			contato.setNome(nomes[i]);
 			contato.setTelefone(fones[i]);
 			contato.setEmail(emails[i]);
 			contato.setDataCadastro(new Date(System.currentTimeMillis()));
+			contato.setObservacao(observacoes[i]);
 			
-			contatoCrudAnnotations.salvar(contato);			
+			contatoCrudXML.salvar(contato);			
 		}
-		System.out.println("Nº total de registros:" + contatoCrudAnnotations.listar().size());
+		System.out.println("Total de registros cadastrados:" + contatoCrudXML.listar().size());
+		
+		System.out.println(" ");
+		
+		System.out.println("Busca Todos Contatos");
+		for(Contato c : contatoCrudXML.listar()){
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			System.out.println("codigo: "+ c.getCodigo());
+			System.out.println("nome: "+ c.getNome());
+			System.out.println("telefone: "+ c.getTelefone());
+			System.out.println("email: "+ c.getEmail());
+			System.out.println("dataCadastro: "+ df.format(c.getDataCadastro()));
+			System.out.println("observacao: "+ c.getObservacao());
+		}
+		
+		
+		
 	}
+
 }
