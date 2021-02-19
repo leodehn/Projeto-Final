@@ -1,4 +1,4 @@
-package proj.conexao;
+package controller;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;

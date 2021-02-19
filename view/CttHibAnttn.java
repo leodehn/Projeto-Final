@@ -1,4 +1,4 @@
-package proj.notacao;
+package view;
 
 import java.util.Date;
 

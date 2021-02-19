@@ -1,4 +1,4 @@
-package proj.conexao;
+package controller;
 
 import org.hibernate.Session;
 
